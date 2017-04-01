@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services ../../vendor/symfony/dependency-injection/Loader/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="bus.query" class="Lcobucci\SecretSauce\Tactician\QueryBus">
+            <argument type="service" id="bus.query.tactician"/>
+            <argument type="service" id="bus.message_creator"/>
+        </service>
+
+        <service id="bus.command" class="Lcobucci\SecretSauce\Tactician\CommandBus">
+            <argument type="service" id="bus.command.tactician"/>
+            <argument type="service" id="bus.message_creator"/>
+        </service>
+
+        <service id="bus.message_creator" class="Lcobucci\SecretSauce\MessageCreator\NamedConstructor" public="false"/>
+
+        <service id="bus.query.tactician" class="League\Tactician\CommandBus" public="false">
+            <argument type="collection">
+                <argument type="service" id="bus.query.middlewares.handler" />
+            </argument>
+        </service>
+
+        <service id="bus.query.middlewares.handler" class="League\Tactician\Handler\CommandHandlerMiddleware" public="false">
+            <argument type="service" id="bus.command_extractor"/>
+            <argument type="service" id="bus.query.locator"/>
+            <argument type="service" id="bus.method_inflector"/>
+        </service>
+
+        <service id="bus.query.locator" class="League\Tactician\Container\ContainerLocator" public="false">
+            <argument type="service" id="service_container.adapted"/>
+        </service>
+
+        <service id="bus.command.tactician" class="League\Tactician\CommandBus" public="false">
+            <argument type="collection">
+                <argument type="service" id="bus.command.middlewares.handler" />
+            </argument>
+        </service>
+
+        <service id="bus.command.middlewares.handler" class="League\Tactician\Handler\CommandHandlerMiddleware" public="false">
+            <argument type="service" id="bus.command_extractor"/>
+            <argument type="service" id="bus.command.locator"/>
+            <argument type="service" id="bus.method_inflector"/>
+        </service>
+
+        <service id="bus.command.locator" class="League\Tactician\Container\ContainerLocator" public="false">
+            <argument type="service" id="service_container.adapted"/>
+        </service>
+
+        <service id="bus.command_extractor" class="League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor" public="false"/>
+        <service id="bus.method_inflector" class="League\Tactician\Handler\MethodNameInflector\HandleInflector" public="false"/>
+    </services>
+</container>

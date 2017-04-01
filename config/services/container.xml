@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services ../../vendor/symfony/dependency-injection/Loader/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="container.acclimator" class="Acclimate\Container\ContainerAcclimator" public="false"/>
+
+        <service id="service_container.adapted" class="Acclimate\Container\Adapter\SymfonyContainerAdapter" public="false">
+            <factory service="container.acclimator" method="acclimate"/>
+            <argument type="service" id="service_container"/>
+        </service>
+    </services>
+</container>

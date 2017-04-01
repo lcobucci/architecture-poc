@@ -14,6 +14,7 @@
     },
     "require": {
         "acclimate/container": "^1.0",
+        "lcobucci/di-builder": "^5.0",
         "league/tactician": "^1.0",
         "league/tactician-container": "^1.0",
         "ramsey/uuid": "^3.6",
@@ -22,6 +23,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Lcobucci\\Sample\\": "src",
             "Lcobucci\\SecretSauce\\": "lib"
         }
     }
