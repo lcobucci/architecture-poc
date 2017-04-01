@@ -16,6 +16,7 @@ if (APPLICATION_ENV == 'dev') {
 
 return $builder->setParameter('app.basedir', realpath(__DIR__ . '/../') . '/')
     ->addFile(__DIR__ . '/services.xml')
+    ->addFile(__DIR__ . '/../src/services.xml')
     ->setDumpDir(__DIR__ . '/../storage/di')
     ->addPass(new SecretSauce\RegisterRoutes('app.main', 'app.router'))
     ->addPass(new SecretSauce\RegisterHandlers())

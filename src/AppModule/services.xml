@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services ../../vendor/symfony/dependency-injection/Loader/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="applications.repository" class="Lcobucci\Sample\AppModule\JsonRepository" public="false">
+            <argument>%app.basedir%storage/apps.json</argument>
+        </service>
+
+        <service id="applications.queries.find_all" class="Lcobucci\Sample\App\RetrieveApps">
+            <argument type="service" id="applications.repository"/>
+
+            <tag name="bus.handler" locator="bus.query.locator" handles="Lcobucci\Sample\App\Message\RetrieveApps"/>
+            <tag name="http_route" id="apps.list" path="/apps" type="read" bus_read="bus.query"
+                 query="Lcobucci\Sample\App\Message\RetrieveApps"/>
+        </service>
+
+        <service id="applications.queries.find_one" class="Lcobucci\Sample\App\RetrieveApp">
+            <argument type="service" id="applications.repository"/>
+
+            <tag name="bus.handler" locator="bus.query.locator" handles="Lcobucci\Sample\App\Message\RetrieveApp"/>
+            <tag name="http_route" id="apps.view" path="/apps/{id}" type="read" bus_read="bus.query"
+                 query="Lcobucci\Sample\App\Message\RetrieveApp"/>
+        </service>
+
+        <service id="applications.commands.create" class="Lcobucci\Sample\App\CreateApp">
+            <argument type="service" id="applications.repository"/>
+
+            <tag name="bus.handler" locator="bus.command.locator" handles="Lcobucci\Sample\App\Message\CreateApp"/>
+            <tag name="http_route" id="apps.create" path="/apps" type="write" bus_write="bus.command"
+                 command="Lcobucci\Sample\App\Message\CreateApp" routeName="apps.view"/>
+        </service>
+
+        <service id="applications.commands.update" class="Lcobucci\Sample\App\UpdateApp">
+            <argument type="service" id="applications.repository"/>
+
+            <tag name="bus.handler" locator="bus.command.locator" handles="Lcobucci\Sample\App\Message\UpdateApp"/>
+            <tag name="http_route" id="apps.update" path="/apps/{id}" type="write_read"
+                 bus_write="bus.command" command="Lcobucci\Sample\App\Message\UpdateApp"
+                 bus_read="bus.query" query="Lcobucci\Sample\App\Message\RetrieveApp" />
+        </service>
+    </services>
+</container>
