@@ -17,16 +17,8 @@ final class RetrieveApp
         $this->apps = $apps;
     }
 
-    /**
-     * TODO: move conversion to a query bus middleware
-     */
-    public function handle(RetrieveAppQuery $query): array
+    public function handle(RetrieveAppQuery $query): App
     {
-        $app = $this->apps->get($query->id);
-
-        return [
-            'id'   => (string) $app->id(),
-            'name' => $app->name(),
-        ];
+        return $this->apps->get($query->id);
     }
 }

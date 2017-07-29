@@ -17,10 +17,12 @@
 
         <service id="bus.query.tactician" class="League\Tactician\CommandBus" public="false">
             <argument type="collection">
+                <argument type="service" id="bus.query.middlewares.converter" />
                 <argument type="service" id="bus.query.middlewares.handler" />
             </argument>
         </service>
 
+        <service id="bus.query.middlewares.converter" class="Lcobucci\SecretSauce\ModelConversion\ReadModelConverter" public="false"/>
         <service id="bus.query.middlewares.handler" class="League\Tactician\Handler\CommandHandlerMiddleware" public="false">
             <argument type="service" id="bus.command_extractor"/>
             <argument type="service" id="bus.query.locator"/>

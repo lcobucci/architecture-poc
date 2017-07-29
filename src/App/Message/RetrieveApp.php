@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Lcobucci\Sample\App\Message;
 
+use Lcobucci\SecretSauce\ModelConversion\Query;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-final class RetrieveApp
+final class RetrieveApp implements Query
 {
     /**
      * @var UuidInterface
@@ -22,5 +23,10 @@ final class RetrieveApp
     public function __construct(UuidInterface $id)
     {
         $this->id = $id;
+    }
+
+    public function getReadModelConverter(): callable
+    {
+        return [App::class, 'fromEntity'];
     }
 }
