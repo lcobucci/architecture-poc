@@ -13,17 +13,24 @@ abstract class NaiveJsonRepository
     /**
      * @var array
      */
-    protected $items;
+    protected $items = [];
 
     public function __construct(string $filename)
     {
         $this->filename = $filename;
-        $this->items    = $this->fromContent(file_get_contents($this->filename));
+
+        if (file_exists($filename)) {
+            $this->items = $this->fromContent(file_get_contents($this->filename));
+        }
     }
 
     public function __destruct()
     {
-        file_put_contents($this->filename, $this->toContent(), LOCK_EX);
+        $content = $this->toContent();
+
+        if (! file_exists($this->filename) || sha1($content) !== sha1_file($this->filename)) {
+            file_put_contents($this->filename, $content, LOCK_EX);
+        }
     }
 
     private function fromContent(string $json): array
@@ -46,7 +53,7 @@ abstract class NaiveJsonRepository
             $this->findAll()
         );
 
-        return json_encode($data, JSON_PRETTY_PRINT);
+        return json_encode($data);
     }
 
     abstract protected function convertObjectToItem($object): array;
