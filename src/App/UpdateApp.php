@@ -8,11 +8,11 @@ use Lcobucci\Sample\App\Message\UpdateApp as UpdateAppCommand;
 final class UpdateApp
 {
     /**
-     * @var ApplicationRepository
+     * @var Repository
      */
     private $apps;
 
-    public function __construct(ApplicationRepository $apps)
+    public function __construct(Repository $apps)
     {
         $this->apps = $apps;
     }

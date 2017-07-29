@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Lcobucci\Sample\AppModule;
+namespace Lcobucci\Sample\App\Repository;
 
 use Lcobucci\Sample\App\App;
-use Lcobucci\Sample\App\ApplicationRepository;
+use Lcobucci\Sample\App\Repository;
 use Lcobucci\Sample\NaiveJsonRepository;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-final class JsonRepository extends NaiveJsonRepository implements ApplicationRepository
+final class Json extends NaiveJsonRepository implements Repository
 {
     public function get(UuidInterface $id): App
     {

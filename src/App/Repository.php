@@ -5,7 +5,7 @@ namespace Lcobucci\Sample\App;
 
 use Ramsey\Uuid\UuidInterface;
 
-interface ApplicationRepository
+interface Repository
 {
     public function get(UuidInterface $id): App;
 

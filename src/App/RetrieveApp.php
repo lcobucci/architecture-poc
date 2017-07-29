@@ -8,11 +8,11 @@ use Lcobucci\Sample\App\Message\RetrieveApp as RetrieveAppQuery;
 final class RetrieveApp
 {
     /**
-     * @var ApplicationRepository
+     * @var Repository
      */
     private $apps;
 
-    public function __construct(ApplicationRepository $apps)
+    public function __construct(Repository $apps)
     {
         $this->apps = $apps;
     }

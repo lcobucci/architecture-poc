@@ -6,11 +6,11 @@ namespace Lcobucci\Sample\App;
 final class RetrieveApps
 {
     /**
-     * @var ApplicationRepository
+     * @var Repository
      */
     private $apps;
 
-    public function __construct(ApplicationRepository $apps)
+    public function __construct(Repository $apps)
     {
         $this->apps = $apps;
     }
