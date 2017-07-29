@@ -13,10 +13,9 @@
         "preferred-install": "dist"
     },
     "require": {
-        "acclimate/container": "^1.0",
         "lcobucci/di-builder": "^5.0",
         "league/tactician": "^1.0",
-        "league/tactician-container": "^1.0",
+        "league/tactician-container": "^2.0",
         "ramsey/uuid": "^3.6",
         "zendframework/zend-expressive": "^2.0",
         "zendframework/zend-expressive-fastroute": "^2.0"

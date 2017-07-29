@@ -5,7 +5,7 @@
     <services>
         <service id="app.main" class="Zend\Expressive\Application">
             <factory class="Zend\Expressive\AppFactory" method="create"/>
-            <argument type="service" id="service_container.adapted"/>
+            <argument type="service" id="service_container"/>
             <argument type="service" id="app.router"/>
 
             <call method="pipeRoutingMiddleware" />
