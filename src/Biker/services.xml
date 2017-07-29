@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services ../../vendor/symfony/dependency-injection/Loader/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="riders.repository" class="Lcobucci\Sample\Biker\Repository\JsonRiders" public="false">
+            <argument>%app.basedir%storage/riders.json</argument>
+        </service>
+        <service id="transactions.repository" class="Lcobucci\Sample\Biker\Repository\JsonTransactions" public="false">
+            <argument>%app.basedir%storage/transactions.json</argument>
+            <argument type="service" id="riders.repository"/>
+        </service>
+        <service id="bikes.repository" class="Lcobucci\Sample\Biker\Repository\JsonBikes" public="false">
+            <argument>%app.basedir%storage/bikes.json</argument>
+        </service>
+        <service id="rents.repository" class="Lcobucci\Sample\Biker\Repository\JsonRents" public="false">
+            <argument>%app.basedir%storage/rents.json</argument>
+            <argument type="service" id="riders.repository"/>
+            <argument type="service" id="bikes.repository"/>
+        </service>
+
+        <service id="transactions.commands.add_credit" class="Lcobucci\Sample\Biker\AddCredit">
+            <argument type="service" id="riders.repository"/>
+            <argument type="service" id="transactions.repository"/>
+
+            <tag name="bus.handler" locator="bus.command.locator" handles="Lcobucci\Sample\Biker\Message\AddCredit"/>
+
+            <tag name="http_route" id="transactions.credit_add" path="/riders/{rider_id}/credits" type="write" bus_write="bus.command"
+                 command="Lcobucci\Sample\Biker\Message\AddCredit" routeName="transactions.credit_add"/>
+        </service>
+
+        <service id="rends.commands.rent_bike" class="Lcobucci\Sample\Biker\RentBike">
+            <argument type="service" id="riders.repository"/>
+            <argument type="service" id="bikes.repository"/>
+            <argument type="service" id="rents.repository"/>
+            <argument type="service" id="transactions.repository"/>
+
+            <tag name="bus.handler" locator="bus.command.locator" handles="Lcobucci\Sample\Biker\Message\RentBike"/>
+
+            <tag name="http_route" id="rents.rent_bike" path="/rents" type="write" bus_write="bus.command"
+                 command="Lcobucci\Sample\Biker\Message\RentBike" routeName="rents.rent_info"/>
+        </service>
+
+        <service id="rends.query.rent_info" class="Lcobucci\Sample\Biker\RetrieveRent">
+            <argument type="service" id="rents.repository"/>
+
+            <tag name="bus.handler" locator="bus.query.locator" handles="Lcobucci\Sample\Biker\Message\RetrieveRent"/>
+
+            <tag name="http_route" id="rents.rent_info" path="/rents/{id}" type="read"
+                 bus_read="bus.query" query="Lcobucci\Sample\Biker\Message\RetrieveRent" />
+        </service>
+
+        <service id="rends.commands.return_bike" class="Lcobucci\Sample\Biker\ReturnBike">
+            <argument type="service" id="rents.repository"/>
+            <argument type="service" id="transactions.repository"/>
+
+            <tag name="bus.handler" locator="bus.command.locator" handles="Lcobucci\Sample\Biker\Message\ReturnBike"/>
+
+            <tag name="http_route" id="rents.return_bike" path="/rents/{id}" type="write_read"
+                 bus_write="bus.command" command="Lcobucci\Sample\Biker\Message\ReturnBike"
+                 bus_read="bus.query" query="Lcobucci\Sample\Biker\Message\RetrieveRent" />
+        </service>
+    </services>
+</container>
